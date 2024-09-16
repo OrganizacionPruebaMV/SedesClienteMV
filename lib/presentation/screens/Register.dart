@@ -74,17 +74,17 @@ class _RegisterUpdateState extends State<Register> {
   Future<void> registerUser() async {
     final url = Uri.parse('${Config.baseUrl}/register');
     if (selectedRole == 'Carnetizador') {
-      idRolSeleccionada = 7;
+      idRolSeleccionada = RoleMember.carnetizador;
     } else if (selectedRole == 'Cliente') {
-      idRolSeleccionada = 8;
+      idRolSeleccionada = RoleMember.cliente;
     }else if(selectedRole=='Super Admin'){
-      idRolSeleccionada = 9;
+      idRolSeleccionada = RoleMember.superAdmin;
     }
     else if(selectedRole=='Jefe de Brigada'){
-      idRolSeleccionada = 6;
+      idRolSeleccionada = RoleMember.jefeBrigada;
     }
     else {
-      idRolSeleccionada = 7;
+      idRolSeleccionada = RoleMember.admin;
     }
 
     // Calcula el hash MD5 de la contraseña

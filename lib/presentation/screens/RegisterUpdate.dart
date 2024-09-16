@@ -185,17 +185,17 @@ Future<File> _downloadImage(String imageUrl) async {
   Future<void> registerUser() async {
     final url = Uri.parse('${Config.baseUrl}/register');
     if (selectedRole == 'Carnetizador') {
-      idRolSeleccionada = 7;
+      idRolSeleccionada = RoleMember.carnetizador;
     } else if (selectedRole == 'Administrador') {
-      idRolSeleccionada = 5;
+      idRolSeleccionada = RoleMember.admin;
     }else if(selectedRole=='Super Admin'){
-      idRolSeleccionada = 9;
+      idRolSeleccionada = RoleMember.superAdmin;
     }
     else if(selectedRole=='Jefe de Brigada'){
-      idRolSeleccionada = 6;
+      idRolSeleccionada = RoleMember.jefeBrigada;
     }
     else {
-      idRolSeleccionada = 8;
+      idRolSeleccionada = RoleMember.cliente;
     }
     String md5Password = md5.convert(utf8.encode(password)).toString();
     final response = await http.post(
@@ -230,17 +230,17 @@ Future<File> _downloadImage(String imageUrl) async {
     final url = Uri.parse(
         '${Config.baseUrl}/update/' + idPerson.toString()); //
     if (selectedRole == 'Carnetizador') {
-      idRolSeleccionada = 7;
+      idRolSeleccionada = RoleMember.carnetizador;
     } else if (selectedRole == 'Administrador') {
-      idRolSeleccionada = 5;
+      idRolSeleccionada = RoleMember.admin;
     }else if(selectedRole=='Super Admin'){
-      idRolSeleccionada = 9;
+      idRolSeleccionada = RoleMember.superAdmin;
     }
     else if(selectedRole=='Jefe de Brigada'){
-      idRolSeleccionada = 6;
+      idRolSeleccionada = RoleMember.jefeBrigada;
     }
     else {
-      idRolSeleccionada = 8;
+      idRolSeleccionada = RoleMember.cliente;
     }
     // Calcula el hash MD5 de la contraseña
     final response = await http.put(

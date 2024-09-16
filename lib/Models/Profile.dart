@@ -61,50 +61,32 @@ factory Member.fromJson2(Map<String, dynamic> json) {
     final result = json['result'];
 
     return Member(
-
       names: result['Nombres'],
-
       id: result['idPerson'],
-
       correo: result['Correo'],
-
       latitud: result['Latitud'],
-
       longitud: result['Longitud'],
-
       fechaCreacion: result['FechaCreacion'] != null
-
           ? DateTime.parse(result['FechaCreacion'])
-
           : null,
-
     );
 
   }
 
 
 factory Member.fromJson3(Map<String, dynamic> json) {
-
     final result = json['result'];
 
     return Member(
-
       names: result['Nombres'],
-
       id: result['idPerson'],
-
       correo: result['Correo'],
-
       latitud: result['Latitud'],
-
       longitud: result['Longitud'],
       contrasena: result['Password'] ,
       fechaCreacion: result['FechaCreacion'] != null
-
           ? DateTime.parse(result['FechaCreacion'])
-
           : null,
-
     );
 
   }
@@ -128,8 +110,6 @@ factory Member.fromJson3(Map<String, dynamic> json) {
       throw Exception('Failed to load members');
     }
   }
-
-   
 }
 
 Future<Member> getCardByUser(int id) async {
@@ -177,19 +157,19 @@ Future<Member> getCardByUser(int id) async {
     final url = Uri.parse('${Config.baseUrl}/register');
     var idRol=0;
         if (miembro.role == 'Carnetizador') {
-      idRol = 3;
+      idRol = RoleMember.carnetizador;
     } else if (miembro.role == 'Cliente') {
-      idRol = 4;
+      idRol = RoleMember.cliente;
     }else if(miembro.role=='Super Admin'){
-      idRol = 5;
+      idRol = RoleMember.superAdmin;
     }
     else if(miembro.role=='Jefe de Brigada'){
-      idRol = 2;
+      idRol = RoleMember.jefeBrigada;
     }
     else if(miembro.role==null){
-      idRol = 4;
+      idRol = RoleMember.cliente;
     }else {
-      idRol = 1;
+      idRol = RoleMember.admin;
     }
     String? md5Password = null;
     if(miembro.contrasena!=null)

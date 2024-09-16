@@ -50,7 +50,7 @@ class _ListMembersScreenState extends State<ListMembersScreen> {
   Future<List<Member>>? members;
 
   Future<List<Member>> fetchMembers() async {
-    final response = await http.get(Uri.parse('${Config.baseUrl}/allaccounts'));
+    final response = await http.get(Uri.parse('${Config.baseUrl}/allclients'));
     print('Fetching members...'); 
 
     if (response.statusCode == 200) {
@@ -264,9 +264,10 @@ class _ListMembersScreenState extends State<ListMembersScreen> {
                               ),
                               SizedBox(height: 16),
                               Align(
-                                alignment: Alignment.bottomRight,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
+                                alignment: Alignment.bottomLeft,  // Alinear a la izquierda
+                                child: Wrap(
+                                  spacing: 10.0, // Espacio horizontal entre los botones
+                                  runSpacing: 10.0, // Espacio vertical entre los botones cuando no entran en la misma fila
                                   children: [
                                     ElevatedButton(
                                       onPressed: () {
@@ -275,34 +276,23 @@ class _ListMembersScreenState extends State<ListMembersScreen> {
                                           builder: (BuildContext context) {
                                             return AlertDialog(
                                               title: Text("Confirmación"),
-                                              content: Text(
-                                                  "¿Estás seguro de que quieres eliminar este registro?"),
+                                              content: Text("¿Estás seguro de que quieres eliminar este registro?"),
                                               actions: [
                                                 TextButton(
                                                   child: Text("Cancelar"),
                                                   onPressed: () {
-                                                    Navigator.of(context)
-                                                        .pop(); // Cierra el cuadro de diálogo
+                                                    Navigator.of(context).pop(); // Cierra el cuadro de diálogo
                                                   },
                                                 ),
                                                 TextButton(
                                                   child: Text("Eliminar"),
                                                   onPressed: () async {
-                                                    // Aquí se ejecuta la función deleteUser si el usuario confirma
-                                                    await showLoadingDialog(context, () async{
-                                                      deleteUser(
-                                                        member.id.toString());
-                                                      deleteImageAndFolder(
-                                                          member.id);
+                                                    await showLoadingDialog(context, () async {
+                                                      deleteUser(member.id.toString());
+                                                      deleteImageAndFolder(member.id);
                                                     });
-                                                    showSnackbar(context, member.names+" Eliminado con éxito");
-                                                    Navigator.of(context)
-                                                        .pop(); // Cierra el cuadro de diálogo
-
-                                                    /*mostrarFinalizar
-                                                        .Mostrar_Finalizados(
-                                                            context,
-                                                            "Registro Eliminado con éxito");*/
+                                                    showSnackbar(context, member.names + " Eliminado con éxito");
+                                                    Navigator.of(context).pop();
                                                     refreshMembersList();
                                                   },
                                                 ),
@@ -314,12 +304,12 @@ class _ListMembersScreenState extends State<ListMembersScreen> {
                                       child: Text("Eliminar"),
                                       style: ElevatedButton.styleFrom(
                                         shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(15.0),
+                                          borderRadius: BorderRadius.circular(10.0), // Ajusta el radio del borde si es necesario
                                         ),
-                                        backgroundColor: Colors.red
+                                        padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0), // Reduce el padding
+                                        backgroundColor: Colors.red,
                                       ),
                                     ),
-                                    SizedBox(width: 10),
                                     ElevatedButton(
                                       onPressed: () {
                                         Navigator.push(
@@ -335,31 +325,31 @@ class _ListMembersScreenState extends State<ListMembersScreen> {
                                       child: Text("Ver Perfil"),
                                       style: ElevatedButton.styleFrom(
                                         shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(15.0),
+                                          borderRadius: BorderRadius.circular(10.0), // Ajusta el radio del borde si es necesario
                                         ),
+                                        padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0), // Reduce el padding
                                       ),
                                     ),
-                                    SizedBox(width: 10),
                                     ElevatedButton(
                                       onPressed: () {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) =>
-                                                ListMascotas(userId: member.id),
+                                            builder: (context) => ListMascotas(userId: member.id),
                                           ),
                                         );
                                       },
                                       child: Text("Ver Mascotas"),
                                       style: ElevatedButton.styleFrom(
                                         shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(15.0),
+                                          borderRadius: BorderRadius.circular(10.0), // Ajusta el radio del borde si es necesario
                                         ),
+                                        padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0), // Reduce el padding
                                       ),
                                     ),
                                   ],
                                 ),
-                              ),
+                              )
                             ],
                           ),
                         ),

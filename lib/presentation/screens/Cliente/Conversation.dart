@@ -46,8 +46,6 @@ class _ChatScreenStateState extends State<ChatScreenState> with SingleTickerProv
   final ConnectivityService _connectivityService = ConnectivityService();
   Map<int, File?> _selectedImages = {};
 
-
-
   @override
   void initState() {
     super.initState();
@@ -82,10 +80,7 @@ class _ChatScreenStateState extends State<ChatScreenState> with SingleTickerProv
       isLoading=false;
       loadAllImages();
     }
-    
 
-    
-    
     //namesChats = await fetchNamesPersonDestino(miembroActual!.id);
     socket.on('chat message', (data) async {
       if (!mounted) return; 
@@ -105,11 +100,7 @@ class _ChatScreenStateState extends State<ChatScreenState> with SingleTickerProv
         });
       }
     });
-
-  }
-
-  
-    }
+  }}
 
   Future<void> loadAllImages() async {
     int idP=0;
@@ -134,11 +125,8 @@ class _ChatScreenStateState extends State<ChatScreenState> with SingleTickerProv
 
   Future<void> addImageToSelectedImages(int idChat,int idPerson) async {
     try {
-
       String imageUrls = await getImageUrl( idPerson);
-
       File tempImage = await _downloadImage(imageUrls);
-
 
       setState(() {
         _selectedImages[idChat] = tempImage;
@@ -182,8 +170,6 @@ Future<File> _downloadImage(String imageUrl) async {
       setState(() {});  
     }    
   }
-
-  
 
   @override
   void dispose() {
@@ -257,8 +243,6 @@ Future<File> _downloadImage(String imageUrl) async {
       isLoading =false;
     });
     //
-    
-    
   }
 
   @override
@@ -288,11 +272,8 @@ Future<File> _downloadImage(String imageUrl) async {
       ? TabBarView(
           controller: _tabController,
           children: [
-            
-            EstadoList(eliminarChatFunction: eliminarChat, selectedImages: _selectedImages,)
-            ,
+            EstadoList(eliminarChatFunction: eliminarChat, selectedImages: _selectedImages,),
             ChatList(eliminarChatFunction: eliminarChat, selectedImages: _selectedImages),
-            
           ],
         )
       : Center(
@@ -339,7 +320,7 @@ Future<File> _downloadImage(String imageUrl) async {
             ),
             actions: [
               Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-TextButton(
+              TextButton(
                 child: Text('Cancelar'),
                 onPressed: () {
                   Navigator.of(context).pop();
@@ -436,49 +417,48 @@ class ChatList extends StatelessWidget {
                 alignment: Alignment.center,
                 children: [
                   selectedImages[chats[index].idChats] != null
-                            ?Stack(
-                                alignment: Alignment.center,
-                                children: [
-                                  CircleAvatar(
-                                    backgroundImage: isloadingProfile?null: FileImage(selectedImages[chats[index].idChats]!),
-                                  ),
-                                  if (isloadingProfile)
-                                    SizedBox(
-                                      width: 60, 
-                                      height: 60, 
-                                      child: SpinKitCircle(
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                ],
-                              )
-                            
-                            :  Stack(
-                                alignment: Alignment.center,
-                                children: [
-                                   CircleAvatar(
-                                    backgroundImage: isloadingProfile?null: AssetImage('assets/usuario.png'),
-                                  ),
-                                  if (isloadingProfile)
-                                    SizedBox(
-                                      width: 60, 
-                                      height: 60, 
-                                      child: SpinKitCircle(
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                ],
-                              ),
-                            
-                ],
+                      ?Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      CircleAvatar(
+                        backgroundImage: isloadingProfile?null: FileImage(selectedImages[chats[index].idChats]!),
+                      ),
+                      if (isloadingProfile)
+                        SizedBox(
+                          width: 60,
+                          height: 60,
+                          child: SpinKitCircle(
+                            color: Colors.white,
+                          ),
+                        ),
+                    ],
+                  )
+
+                      :  Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      CircleAvatar(
+                        backgroundImage: isloadingProfile?null: AssetImage('assets/usuario.png'),
+                      ),
+                      if (isloadingProfile)
+                        SizedBox(
+                          width: 60,
+                          height: 60,
+                          child: SpinKitCircle(
+                            color: Colors.white,
+                          ),
+                        ),
+                    ],
+                  ),
+                  ],
+                ),
               ),
             ),
-          ),
-        ):Container();
-      },
-    );
+          ):Container();
+        },
+      );
+    }
   }
-}
 
 class EstadoList extends StatelessWidget {
   final Function eliminarChatFunction;

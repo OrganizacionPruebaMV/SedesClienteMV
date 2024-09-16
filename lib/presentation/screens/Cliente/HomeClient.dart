@@ -178,14 +178,14 @@ Future<File> _downloadImage(String imageUrl) async {
               TextButton(
                 onPressed: () {
                   // Navega a la otra página aquí
-                       Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => RegisterUpdate(
-                                          isUpdate: true,
-                                          userData: miembroActual,
-                                        )),
-                              );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => RegisterUpdate(
+                          isUpdate: true,
+                          userData: miembroActual,
+                        )),
+                  );
                 },
                 child: Text('Actualizar'),
               ),
@@ -312,7 +312,7 @@ Future<File> _downloadImage(String imageUrl) async {
                                       backgroundImage: isloadingProfile?null: AssetImage('assets/usuario.png'),
                                       radius: avatarRadius,
                                     ),
-if (isloadingProfile)
+                                if (isloadingProfile)
                                       SizedBox(
                                         width: 60,
                                         height: 60,
@@ -325,25 +325,25 @@ if (isloadingProfile)
                               );
                           },
                         ),
-Text(
+                        Text(
                           miembroActual?.names ?? '',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
-                      ),
-  Text(
+                        ),
+                        Text(
                           miembroActual?.correo ?? '',
                           style: TextStyle(
                             color: Colors.white70,
                             fontSize: 16,
                           ),
                         ),
-],
+                      ],
                     ),
                   ),
- ) ),
+                ) ),
 
               ListTile(
                 title: Text('Nombres: ${miembroActual?.names ?? ''}'),
@@ -396,11 +396,11 @@ Text(
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                                builder: (context) => ChatPage(
-                                                      idChat: lastId,
-                                                      nombreChat: 'Soporte',
-                                                      idPersonDestino: 0,
-                                                    )),
+                                              builder: (context) => ChatPage(
+                                                idChat: lastId,
+                                                nombreChat: 'Soporte',
+                                                idPersonDestino: 0,
+                                              )),
                                           )
                                         })
                                   })
@@ -410,11 +410,11 @@ Text(
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => ChatPage(
-                                          idChat: filteredList[0].idChats,
-                                          nombreChat: 'Soporte',
-                                          idPersonDestino: 0,
-                                        )),
+                                  builder: (context) => ChatPage(
+                                     idChat: filteredList[0].idChats,
+                                     nombreChat: 'Soporte',
+                                     idPersonDestino: 0,
+                                  )),
                               )
                             }
                         });

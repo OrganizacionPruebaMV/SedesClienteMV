@@ -1,43 +1,24 @@
 import 'dart:convert';
-
 import 'dart:math';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttapp/Config/Config.dart';
-
 import 'package:fluttapp/Models/Profile.dart';
-
 import 'package:fluttapp/presentation/screens/Carnetizador/HomeCarnetizador.dart';
-
 import 'package:fluttapp/presentation/screens/ChangePassword.dart';
-
 import 'package:fluttapp/presentation/screens/Cliente/HomeClient.dart';
-
 import 'package:fluttapp/presentation/screens/Register.dart';
 import 'package:fluttapp/presentation/screens/RegisterUpdate.dart';
-
 import 'package:fluttapp/presentation/services/auth_google.dart';
-
 import 'package:fluttapp/presentation/services/services_firebase.dart';
-
 import 'package:fluttapp/services/firebase_service.dart';
-
 import 'package:flutter/material.dart';
-
 import 'package:crypto/crypto.dart';
-
 import 'package:flutter/services.dart';
-
 import 'package:google_sign_in/google_sign_in.dart';
-
 import 'package:http/http.dart' as http;
-
 import 'package:fluttapp/presentation/services/alert.dart';
-
 import 'package:flutter_login_facebook/flutter_login_facebook.dart';
-
 import 'package:mailer/mailer.dart';
-
 import 'package:mailer/smtp_server/gmail.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -64,13 +45,9 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   TextEditingController correoController = TextEditingController();
-
   TextEditingController contrasenaController = TextEditingController();
-
   String? mensajeErrorCorreo;
-
   String? mensajeErrorContrasena;
-
   final AuthGoogle authGoogle = AuthGoogle();
   int? memberId = 0;
   bool isloading = false;
@@ -233,9 +210,7 @@ try {
 
   Future<bool> sendEmailAndUpdateCode(int userId) async {
     final code = generateRandomCode();
-
     final exists = await checkCodeExists(userId);
-
     final smtpServer = gmail('bdcbba96@gmail.com', 'ehbh ugsw srnj jxsf');
 
     final message = Message()
@@ -246,9 +221,7 @@ try {
 
     try {
       final sendReport = await send(message, smtpServer);
-
       print('Message sent: ' + sendReport.toString());
-
       // Actualiza la base de datos
 
       final url = exists
@@ -280,12 +253,9 @@ try {
 
   String generateRandomCode() {
     final random = Random();
-
     final firstDigit =
         random.nextInt(9) + 1; // Genera un número aleatorio entre 1 y 9
-
     final restOfDigits = List.generate(4, (index) => random.nextInt(10)).join();
-
     final code = '$firstDigit$restOfDigits';
 
     return code;
@@ -327,17 +297,38 @@ try {
             ElevatedButton(
               onPressed: () async {
                 // Mostrar el mensaje de espera
+                showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: Text('Espere unos momentos....'),
+                      content: SingleChildScrollView(
+                        child: ListBody(
+                          children: [
+                            Center(
+                              child: SpinKitFadingCube(
+                                color: Colors.blue, // Color de la animación
+                                size: 50.0, // Tamaño de la animación
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                );
+                //final member = await comprobarPassword(email);
+                final member = await recoverPassword(email);
 
-                final member = await comprobarPassword(email);
-
-                if (member!.contrasena == null) {
+                /*if (member!.contrasena == null) {
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
                       return AlertDialog(
-                        title: Text("Confirmacioooooooooon"),
+                        title: Text("Confirmación"),
                         content: Text(
-                            "No puede recuperar la contrasena si es usuario de Facebook o Google"),
+                            "No puede recuperar la contraseña si es usuario de Facebook o Google"),
                         actions: [
                           TextButton(
                             child: Text("Cancelar"),
@@ -365,7 +356,7 @@ try {
                         ),
                       );
                     },
-                  );
+                  );*/
 
                   Future.microtask(() async {
                     final success = await sendEmailAndUpdateCode(member!.id);
@@ -401,7 +392,7 @@ try {
                       );
                     }
                   });
-                }
+                //}
               },
               child: Text('Recuperar Contraseña'),
               style: ElevatedButton.styleFrom(
@@ -820,52 +811,35 @@ try {
 
   _facebookLogin() async {
     Member? facebookUser;
-
     // Create an instance of FacebookLogin
-
     final fb = FacebookLogin();
-
     // Log in
-
     final res = await fb.logIn(permissions: [
       FacebookPermission.publicProfile, // Permiso para perfil
 
       FacebookPermission.email, // Permiso para tener el correo electrónico
     ]);
-
     // Check result status
 
     switch (res.status) {
       case FacebookLoginStatus.success:
-
         // Logged in
-
         // Send access token to server for validation and auth
-
         final FacebookAccessToken? accessToken =
             res.accessToken; // Obtener el token
-
         // Get profile data
-
         final profile = await fb.getUserProfile();
-
         // Get user profile image URL
-
         final imageUrl =
             await fb.getProfileImageUrl(width: 100); // Obtener la imagen
 
         print('Access token: ${accessToken?.token}');
-
         print('Hello, ${profile?.name}! You ID: ${profile?.userId}');
-
         print('Your profile image: $imageUrl');
 
         // Get email (since we request email permission)
-
         final email = await fb.getUserEmail();
-
         // Verificar si el correo de Facebook ya está registrado
-
         final existingMember = await checkemailexist(email!);
 
         if (existingMember != null) {
@@ -885,19 +859,12 @@ try {
               Member(names: "", lastnames: "",id: 0, correo: "", latitud: 0.1, longitud: 0.1);
 
           newMember.correo = email;
-
           newMember.fechaCreacion = DateTime.now();
-
           newMember.status = 1;
-
           newMember.role = null;
-
           newMember.names = profile!.firstName!;
-
           newMember.lastnames = profile.lastName!;
-
           newMember.role = "Cliente";
-
           // Agrega otros campos necesarios aquí
 
           final registrationResult = await registerUser2(newMember);
@@ -918,21 +885,15 @@ try {
             // Error en el registro, manejar de acuerdo a tus necesidades
           }
         }
-
         break;
 
       case FacebookLoginStatus.cancel:
-
         // Usuario canceló el inicio de sesión
-
         break;
 
       case FacebookLoginStatus.error:
-
         // Error en el inicio de sesión
-
         print('Error while log in: ${res.error}');
-
         break;
     }
   }

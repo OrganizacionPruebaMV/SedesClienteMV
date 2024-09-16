@@ -95,14 +95,10 @@ class _ChatPageState extends State<ChatPage> {
     });
   }
 
-
-
   @override
   void dispose() {
     currentChatId=0;
     super.dispose();
-    
-    
   }
 
   @override

@@ -406,27 +406,24 @@ Future<void> addImageUrlsToSelectedImages(
                       ),
                       child: ListTile(
                         leading: Stack(
-  alignment: Alignment.center,
-  children: [
-    CircleAvatar(
-      backgroundImage: (_selectedImages[widget.mascotas[index].idMascotas] != null && _selectedImages[widget.mascotas[index].idMascotas]!.isNotEmpty)
-          ? FileImage(_selectedImages[widget.mascotas[index].idMascotas]![0]!)
-          : null,
-      radius: 30,
-    ),
-    if (_selectedImages.isEmpty || (_selectedImages[widget.mascotas[index].idMascotas]?.isEmpty ?? true))
-      SizedBox(
-        width: 60, 
-        height: 60, 
-        child: SpinKitCircle(
-          color:Colors.white,
-        ),
-      ),
-  ],
-),
-
-
-
+                          alignment: Alignment.center,
+                          children: [
+                            CircleAvatar(
+                              backgroundImage: (_selectedImages[widget.mascotas[index].idMascotas] != null && _selectedImages[widget.mascotas[index].idMascotas]!.isNotEmpty)
+                                  ? FileImage(_selectedImages[widget.mascotas[index].idMascotas]![0]!)
+                                  : null,
+                              radius: 30,
+                            ),
+                            if (_selectedImages.isEmpty || (_selectedImages[widget.mascotas[index].idMascotas]?.isEmpty ?? true))
+                              SizedBox(
+                                width: 60,
+                                height: 60,
+                                child: SpinKitCircle(
+                                  color:Colors.white,
+                                ),
+                              ),
+                          ],
+                        ),
                         title: Text(
                           mascota.nombre,
                           style: TextStyle(

@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:fluttapp/Config/Config.dart';
 import 'package:fluttapp/Models/Profile.dart';
 import 'package:fluttapp/presentation/littlescreens/Popout.dart';
@@ -11,8 +10,6 @@ import 'package:fluttapp/presentation/services/services_firebase.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart' as http;
-
-
 
 int estadoPerfil = 0;
 

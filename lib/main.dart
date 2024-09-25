@@ -1,89 +1,120 @@
-/// <summary>
-/// Nombre de la aplicación: MaYpiVaC
-/// Nombre del desarrollador: Equipo-Sedes-Univalle
-/// Fecha de creación: 18/08/2023
-/// </summary>
-///
-// <copyright file="main.dart" company="Sedes-Univalle">
-// Esta clase está restringida para su uso, sin la previa autorización de Sedes-Univalle.
-// </copyright>
-
-import 'dart:async';
-
-import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:fluttapp/firebase_options.dart';
-import 'package:fluttapp/presentation/screens/Carnetizador/HomeCarnetizador.dart';
-import 'package:fluttapp/presentation/screens/Carnetizador/SearchClientNew.dart';
-import 'package:fluttapp/presentation/screens/Maps.dart';
-import 'package:fluttapp/presentation/screens/QRPage.dart';
-import 'package:fluttapp/presentation/screens/Carnetizador/ListMascotas.dart';
-import 'package:fluttapp/presentation/screens/Login.dart';
-import 'package:fluttapp/presentation/screens/Register.dart';
-import 'package:fluttapp/presentation/screens/Carnetizador/RegisterPet.dart';
-import 'package:fluttapp/presentation/screens/SplashScreen.dart';
-import 'package:fluttapp/presentation/screens/Cliente/HomeClient.dart';
-import 'package:fluttapp/services/NoInternetPage.dart';
-import 'package:fluttapp/services/global_notification.dart';
-import 'package:fluttapp/services/notification_services.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:pruebaa/DashboardScreen.dart';
 
-
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  await PushNotificationService.initializeApp();
-  //PushNotificationService.messagesStream.listen((message){
-  //  print('MyApp: $message');
-  //});
-
-  runApp(MultiProvider(
-    providers: [
-      Provider<LocalNotificationService>(
-          create: (context) => LocalNotificationService()),
-      //Provider<PushNotificationService>(create: (context) => PushNotificationService(),)
-    ],
-    child: const MainApp(),
-  ));
+void main() {
+  runApp(MyApp());
 }
 
-class MainApp extends StatefulWidget {
-  const MainApp({Key? key}) : super(key: key);
-
-  @override
-  _MainAppState createState() => _MainAppState();
-}
-
-class _MainAppState extends State<MainApp> {
-
-
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'Flutter Login UI',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Color(0xFF5C8ECB)),
-        primaryColor: Color(0xFF5C8ECB),
+      home: LoginPage(),
+    );
+  }
+}
+
+class LoginPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Image.asset('assets/LogoMaypiVac.png', height: 300, width: 400),
+              SizedBox(height: screenHeight * 0.02),
+              TextField(
+                decoration: InputDecoration(
+                  labelText: 'Correo Electrónico',
+                  border: UnderlineInputBorder(),
+                ),
+              ),
+              SizedBox(height: 10),
+              TextField(
+                obscureText: true,
+                decoration: InputDecoration(
+                  labelText: 'Contraseña',
+                  border: UnderlineInputBorder(),
+                ),
+              ),
+              SizedBox(height: 5),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  TextButton(
+                    onPressed: () {},
+                    child: Text(
+                      '¡Regístrate!',
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {},
+                    child: Text(
+                      '¿Olvidaste tu contraseña?',
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 15),
+              ElevatedButton(
+                onPressed: () {},
+                child: Text(
+                  'Iniciar Sesión',
+                  style: TextStyle(color: Colors.white),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xFF4673C6),
+                  minimumSize: Size(200, 50),
+                ),
+              ),
+              SizedBox(height: 15),
+              Text('O continuar con:', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+              SizedBox(height: 5),
+              ElevatedButton.icon(
+                icon: Image.asset('assets/descarga.png', height: 24),
+                label: Text(
+                  'Continuar con Google',
+                  style: TextStyle(color: Colors.black),
+                ),
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  foregroundColor: Colors.black,
+                  side: BorderSide(color: Colors.black, width: 2),
+                  minimumSize: Size(230, 50),
+                ),
+              ),
+              SizedBox(height: 15),
+              ElevatedButton.icon(
+                icon: Image.asset('assets/LogoInvitado.webp', height: 24),
+                label: Text(
+                  'Continuar como invitado',
+                  style: TextStyle(color: Colors.black),
+                ),
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>DashboardScreen()));             
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  foregroundColor: Colors.black,
+                  side: BorderSide(color: Colors.black, width: 2),
+                  minimumSize: Size(160, 50),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
-      initialRoute: '/home',
-      routes: {
-        //Pantalla principal
-        '/home': (context) => SplashScreen(),
-        "NoInternetPage": (context) => NoInternetPage(),
-        '/login': (context) => LoginPage(),
-        '/viewClient': (context) => ViewClient(userId: 0),
-        //'/viewCarnetizador': (context) => HomeCarnetizador(userId: 0),
-        '/register': (context) => Register(),
-        '/viewMap': (context) => VerCamapanas(),
-        //'/listPets': (context) => ListMascotas(),
-        '/searchClientNew': (context) => ListMembersScreen(
-              userId: 0,
-            ),
-        '/qrpage': (context) => QRScannerPage(),
-      },
     );
   }
 }

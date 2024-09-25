@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "fluttapp" "\0"
+            VALUE "FileDescription", "pruebaa" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "fluttapp" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2023 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "fluttapp.exe" "\0"
-            VALUE "ProductName", "fluttapp" "\0"
+            VALUE "InternalName", "pruebaa" "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2024 com.example. All rights reserved." "\0"
+            VALUE "OriginalFilename", "pruebaa.exe" "\0"
+            VALUE "ProductName", "pruebaa" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

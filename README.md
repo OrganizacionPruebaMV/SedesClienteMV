@@ -1,9 +1,16 @@
-# SedesCliente-V2
-` fluter pub get ` (Sólo es necesario la primera vez que se ejecuta)
+# pruebaa
 
-` flutter run ` (o el botón de run en android studio)
+A new Flutter project.
 
-* En el cmd ejecutar ` ipconfig `
-* Actualizar dirección IPv4 de la red wifi a la que está conectada la laptop y el celular en lib>Config>Config.dart
+## Getting Started
 
-### Nota: El backend debe estar ejecutándose para que el Cliente o Administrador funcionen.
+This project is a starting point for a Flutter application.
+
+A few resources to get you started if this is your first Flutter project:
+
+- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
+- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+
+For help getting started with Flutter development, view the
+[online documentation](https://docs.flutter.dev/), which offers tutorials,
+samples, guidance on mobile development, and a full API reference.

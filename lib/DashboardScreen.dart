@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'ActivitiesScreen.dart';
+import 'package:pruebaa/ActivitiesScreen.dart';
 
 class DashboardScreen extends StatelessWidget {
   @override

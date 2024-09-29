@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart'; // Importa intl para usar DateFormat
-import 'MapaCBBA.dart';
+import 'package:pruebaa/MapaCBBA.dart';
 
 class ActivitiesScreen extends StatelessWidget {
   ActivitiesScreen({Key? key}) : super(key: key);

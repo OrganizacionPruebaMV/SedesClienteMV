@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:fluttapp/Implementation/ChatImp.dart';
@@ -7,7 +6,6 @@ import 'package:fluttapp/presentation/services/services_firebase.dart';
 import 'package:fluttapp/services/firebase_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-
 
 void main() => runApp(ChatApp());
 
@@ -33,30 +31,31 @@ class ChatPage extends StatefulWidget {
   final String nombreChat;
   final int idPersonDestino;
   final File? imageChat;
-  ChatPage({required this.idChat, required this.nombreChat, required this.idPersonDestino, this.imageChat});
+  ChatPage(
+      {required this.idChat,
+      required this.nombreChat,
+      required this.idPersonDestino,
+      this.imageChat});
   @override
   _ChatPageState createState() => _ChatPageState();
 }
 
 class _ChatPageState extends State<ChatPage> {
   ScrollController _scrollController = ScrollController();
-  bool isLoadingMessages=false;
+  bool isLoadingMessages = false;
   TextStyle styleNombreMensaje = TextStyle(
-      color: Colors.grey[350],
-      fontSize: 18.0,
-      fontWeight: FontWeight.bold,
-      fontStyle: FontStyle.italic, 
-      shadows: [
-        Shadow(
-          blurRadius: 2.0,
-          color: Colors.black38,
-          offset: Offset(1.0, 1.0),
-        ),
-      ],
-    );
-
-
-
+    color: Colors.grey[350],
+    fontSize: 18.0,
+    fontWeight: FontWeight.bold,
+    fontStyle: FontStyle.italic,
+    shadows: [
+      Shadow(
+        blurRadius: 2.0,
+        color: Colors.black38,
+        offset: Offset(1.0, 1.0),
+      ),
+    ],
+  );
 
   TextEditingController _controller = TextEditingController();
 
@@ -66,24 +65,31 @@ class _ChatPageState extends State<ChatPage> {
     currentChatId = widget.idChat;
 
     fetchMessage(widget.idChat).then((value) => {
-      if(mounted){
-        setState((){
-          messages = value;
-          messages = messages.reversed.toList();
-          print(messages.toString());
-          print(miembroActual!.id);
-          isLoadingMessages=true;
-        })
-      }
-    });
-  
+          if (mounted)
+            {
+              setState(() {
+                messages = value;
+                messages = messages.reversed.toList();
+                print(messages.toString());
+                print(miembroActual!.id);
+                isLoadingMessages = true;
+              })
+            }
+        });
+
     socket.on('chat message', (data) async {
       //ChatMessage chat = ChatMessage(idPerson: miembroActual!.id, mensaje: data, idChat: widget.idChat);
       int chatId = widget.idChat;
       if (mounted) {
         setState(() {
-          if(chatId == data[3])
-          messages.insert(0, ChatMessage(idPerson: data[0], mensaje: data[1], idChat: chatId, nombres: data[2]));
+          if (chatId == data[3])
+            messages.insert(
+                0,
+                ChatMessage(
+                    idPerson: data[0],
+                    mensaje: data[1],
+                    idChat: chatId,
+                    nombres: data[2]));
         });
         _scrollController.animateTo(
           0.0,
@@ -91,13 +97,12 @@ class _ChatPageState extends State<ChatPage> {
           curve: Curves.easeOut,
         );
       }
-      
     });
   }
 
   @override
   void dispose() {
-    currentChatId=0;
+    currentChatId = 0;
     super.dispose();
   }
 
@@ -107,16 +112,19 @@ class _ChatPageState extends State<ChatPage> {
       backgroundColor: Color(0xFF5C8ECB),
       appBar: AppBar(
         backgroundColor: Color(0xFF5C8ECB),
-        title: Row(children: [
-          CircleAvatar(
-            backgroundImage: widget.imageChat != null ? 
-              FileImage(widget.imageChat!) : 
-              AssetImage('assets/usuario.png') as ImageProvider,
-          ),
-
-          SizedBox(width: 20,),
-          Text(widget.nombreChat, style: TextStyle(color: Colors.white)),
-        ],) ,
+        title: Row(
+          children: [
+            CircleAvatar(
+              backgroundImage: widget.imageChat != null
+                  ? FileImage(widget.imageChat!)
+                  : AssetImage('assets/usuario.png') as ImageProvider,
+            ),
+            SizedBox(
+              width: 20,
+            ),
+            Text(widget.nombreChat, style: TextStyle(color: Colors.white)),
+          ],
+        ),
         centerTitle: true,
         leading: Builder(
           builder: (context) => IconButton(
@@ -127,114 +135,178 @@ class _ChatPageState extends State<ChatPage> {
           ),
         ),
       ),
-      body: isLoadingMessages? Column(
-        children: <Widget>[
-          Expanded(
-            child: ListView.builder(
-              reverse: true,
-              controller: _scrollController,
-              padding: EdgeInsets.all(10.0),
-              itemCount: messages.length,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 5.0),
-                  child: Column(
-                    crossAxisAlignment:
-                        widget.idPersonDestino!=0?
-                         (messages[index].idPerson != widget.idPersonDestino
-                            ? CrossAxisAlignment.end
-                            : CrossAxisAlignment.start):
-                            (messages[index].idPerson == miembroActual!.id?CrossAxisAlignment.end
-                            : CrossAxisAlignment.start),
-                    children: <Widget>[
-                      widget.idPersonDestino!=0?
-                      (messages[index].idPerson != widget.idPersonDestino
-                        && messages[index].idPerson == miembroActual!.id
-                        ? Text('Yo', style: styleNombreMensaje)
-                        : Text(messages[index].nombres, style: styleNombreMensaje)
-                      )
-                      :
-                      (messages[index].idPerson == miembroActual!.id
-                        ? Text('Yo', style: styleNombreMensaje)
-                        : Text(messages[index].nombres, style: styleNombreMensaje)
-                      ),  
-                      Card(
-                        color: 
-                        widget.idPersonDestino!=0?
-                        (messages[index].idPerson != widget.idPersonDestino
-                            ? Colors.green
-                            : Colors.white):(messages[index].idPerson == miembroActual!.id
-                            ? Colors.green
-                            : Colors.white),
-                        elevation: 5.0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.0),
+      body: isLoadingMessages
+          ? Column(
+              children: <Widget>[
+                Expanded(
+                  child: ListView.builder(
+                    reverse: true,
+                    controller: _scrollController,
+                    padding: EdgeInsets.all(10.0),
+                    itemCount: messages.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical:
+                                9.0), // Aumenta el padding vertical del mensaje
+                        child: Column(
+                          crossAxisAlignment: widget.idPersonDestino != 0
+                              ? (messages[index].idPerson !=
+                                      widget.idPersonDestino
+                                  ? CrossAxisAlignment.end
+                                  : CrossAxisAlignment.start)
+                              : (messages[index].idPerson == miembroActual!.id
+                                  ? CrossAxisAlignment.end
+                                  : CrossAxisAlignment.start),
+                          children: <Widget>[
+                            widget.idPersonDestino != 0
+                                ? (messages[index].idPerson !=
+                                            widget.idPersonDestino &&
+                                        messages[index].idPerson ==
+                                            miembroActual!.id
+                                    ? Text('Yo', style: styleNombreMensaje)
+                                    : Text(messages[index].nombres,
+                                        style: styleNombreMensaje))
+                                : (messages[index].idPerson == miembroActual!.id
+                                    ? Text('Yo', style: styleNombreMensaje)
+                                    : Text(messages[index].nombres,
+                                        style: styleNombreMensaje)),
+                            Card(
+                              color: widget.idPersonDestino != 0
+                                  ? (messages[index].idPerson !=
+                                          widget.idPersonDestino
+                                      ? Colors.green
+                                      : Colors.white)
+                                  : (messages[index].idPerson ==
+                                          miembroActual!.id
+                                      ? Colors.green
+                                      : Colors.white),
+                              elevation: 5.0,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                    17.0), // Ajusta el radio del borde para un estilo más redondeado
+                              ),
+                              child: Stack(
+                                children: [
+                                  // Limita el ancho del mensaje
+                                  ConstrainedBox(
+                                    constraints: BoxConstraints(
+                                      maxWidth: MediaQuery.of(context)
+                                              .size
+                                              .width *
+                                          0.8, // Aumenta el ancho máximo permitido al 85% de la pantalla
+                                    ),
+                                    child: Padding(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal:
+                                            28.0, // Aumenta el padding horizontal
+                                        vertical:
+                                            16.0, // Aumenta el padding vertical
+                                      ),
+                                      child: Text(
+                                        messages[index].mensaje,
+                                        style: TextStyle(
+                                          color: widget.idPersonDestino != 0
+                                              ? (messages[index].idPerson !=
+                                                      widget.idPersonDestino
+                                                  ? Colors.white
+                                                  : Colors.black)
+                                              : (messages[index].idPerson ==
+                                                      miembroActual!.id
+                                                  ? Colors.white
+                                                  : Colors.black),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  // Posición y tamaño de la imagen y hora
+                                  Positioned(
+                                    bottom:
+                                        -3, // Asegura que esté en la parte inferior
+                                    right: 5, // Mantiene la imagen a la derecha
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      children: [
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(right: 5.0),
+                                          child: Text(
+                                            '12:45', // Hora y minutos estáticos para la vista
+                                            style: TextStyle(
+                                              fontSize: 9,
+                                              color: Color.fromARGB(255, 39, 39,
+                                                  39), // Color del texto de la hora
+                                            ),
+                                          ),
+                                        ),
+                                        Image.asset(
+                                          'assets/doblePalomaNoVisto.png', // Ruta de la imagen
+                                          width:
+                                              18, // Aumenta el tamaño de la imagen si es necesario
+                                          height:
+                                              18, // Aumenta el tamaño de la imagen si es necesario
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 15.0, vertical: 10.0),
-                          child: Text(
-                            messages[index].mensaje,
-                            style: TextStyle(
-                              color:
-                                  widget.idPersonDestino!=0?
-                                  (messages[index].idPerson != widget.idPersonDestino //messages[index].idPerson == miembroActual!.id
-                                      ? Colors.white
-                                      : Colors.black):(messages[index].idPerson == miembroActual!.id
-                                      ? Colors.white
-                                      : Colors.black),
+                      );
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 8.0, vertical: 4.0),
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: TextField(
+                          controller: _controller,
+                          style: TextStyle(color: Color(0xFF4D6596)),
+                          decoration: InputDecoration(
+                            hintText: 'Escribe un mensaje...',
+                            hintStyle: TextStyle(
+                                color: Color(0xFF4D6596).withOpacity(0.7)),
+                            filled: true,
+                            fillColor: Colors.white,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Color(0xFF5C8ECB), width: 1.0),
+                              borderRadius: BorderRadius.circular(8.0),
                             ),
                           ),
                         ),
                       ),
+                      IconButton(
+                        icon: Icon(Icons.send, color: Colors.white),
+                        onPressed: () async {
+                          if (_controller.text.isNotEmpty) {
+                            await sendMessage(miembroActual!.id,
+                                _controller.text, widget.idChat);
+                            //socket.emit('chat message', _controller.text);
+                            _controller.clear();
+                          }
+                        },
+                      )
                     ],
                   ),
-                );
-              },
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: TextField(
-                    controller: _controller,
-                    style: TextStyle(color: Color(0xFF4D6596)),
-                    decoration: InputDecoration(
-                      hintText: 'Escribe un mensaje...',
-                      hintStyle:
-                          TextStyle(color: Color(0xFF4D6596).withOpacity(0.7)),
-                      filled: true,
-                      fillColor: Colors.white,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xFF5C8ECB), width: 1.0),
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                    ),
-                  ),
-                ),
-                IconButton(
-                  icon: Icon(Icons.send, color: Colors.white),
-                  onPressed: () async {
-                    if (_controller.text.isNotEmpty) {
-                      await sendMessage(miembroActual!.id, _controller.text, widget.idChat);
-                      //socket.emit('chat message', _controller.text);
-                      _controller.clear();
-                    }
-                  },
                 )
               ],
+            )
+          : Center(
+              child: SpinKitCircle(
+                color: Colors.white,
+                size: 50.0,
+              ),
             ),
-          )
-        ],
-      ):Center(child: SpinKitCircle(
-                      color: Colors.white,
-                      size: 50.0,
-                    ),),
     );
   }
 }

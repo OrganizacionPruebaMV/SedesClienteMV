@@ -3,7 +3,7 @@ class ChatMessage {
   final String mensaje;
   final int idChat;
   final String nombres;
-  final bool visto; // Nuevo atributo
+  late final bool visto; // Nuevo atributo
   final DateTime fechaRegistro; // Nuevo atributo
 
   ChatMessage({

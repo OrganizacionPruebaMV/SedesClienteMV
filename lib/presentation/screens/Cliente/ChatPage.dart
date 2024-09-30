@@ -31,11 +31,13 @@ class ChatPage extends StatefulWidget {
   final String nombreChat;
   final int idPersonDestino;
   final File? imageChat;
+
   ChatPage(
       {required this.idChat,
       required this.nombreChat,
       required this.idPersonDestino,
       this.imageChat});
+
   @override
   _ChatPageState createState() => _ChatPageState();
 }
@@ -64,32 +66,42 @@ class _ChatPageState extends State<ChatPage> {
     super.initState();
     currentChatId = widget.idChat;
 
-    fetchMessage(widget.idChat).then((value) => {
-          if (mounted)
-            {
-              setState(() {
-                messages = value;
-                messages = messages.reversed.toList();
-                print(messages.toString());
-                print(miembroActual!.id);
-                isLoadingMessages = true;
-              })
-            }
+    fetchMessage(widget.idChat).then((value) {
+      if (mounted) {
+        setState(() {
+          messages = value;
+          messages = messages.reversed.toList();
+          print("Mensajes cargados: ${messages.toString()}");
+          print("ID del miembro actual: ${miembroActual!.id}");
+          isLoadingMessages = true;
         });
+      }
+    });
 
     socket.on('chat message', (data) async {
-      //ChatMessage chat = ChatMessage(idPerson: miembroActual!.id, mensaje: data, idChat: widget.idChat);
+      print("Datos recibidos del socket: $data"); // Imprime los datos recibidos
       int chatId = widget.idChat;
       if (mounted) {
         setState(() {
-          if (chatId == data[3])
+          if (chatId == data[3]) {
             messages.insert(
-                0,
-                ChatMessage(
-                    idPerson: data[0],
-                    mensaje: data[1],
-                    idChat: chatId,
-                    nombres: data[2]));
+              0,
+              ChatMessage(
+                idPerson: data[0],
+                mensaje: data[1],
+                idChat: chatId,
+                nombres: data[2],
+                visto:
+                    false, // Asigna un valor predeterminado o basado en tu lógica
+                fechaRegistro:
+                    DateTime.now(), // O la fecha que recibas del servidor
+              ),
+            );
+            print(
+                "Mensaje agregado: ${data[1]}"); // Imprime el mensaje agregado
+          } else {
+            print("El ID del chat no coincide: $chatId != ${data[3]}");
+          }
         });
         _scrollController.animateTo(
           0.0,
@@ -146,9 +158,7 @@ class _ChatPageState extends State<ChatPage> {
                     itemCount: messages.length,
                     itemBuilder: (context, index) {
                       return Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical:
-                                9.0), // Aumenta el padding vertical del mensaje
+                        padding: const EdgeInsets.symmetric(vertical: 9.0),
                         child: Column(
                           crossAxisAlignment: widget.idPersonDestino != 0
                               ? (messages[index].idPerson !=
@@ -183,25 +193,20 @@ class _ChatPageState extends State<ChatPage> {
                                       : Colors.white),
                               elevation: 5.0,
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(
-                                    17.0), // Ajusta el radio del borde para un estilo más redondeado
+                                borderRadius: BorderRadius.circular(17.0),
                               ),
                               child: Stack(
                                 children: [
-                                  // Limita el ancho del mensaje
                                   ConstrainedBox(
                                     constraints: BoxConstraints(
-                                      maxWidth: MediaQuery.of(context)
-                                              .size
-                                              .width *
-                                          0.8, // Aumenta el ancho máximo permitido al 85% de la pantalla
+                                      maxWidth:
+                                          MediaQuery.of(context).size.width *
+                                              0.8,
                                     ),
                                     child: Padding(
                                       padding: EdgeInsets.symmetric(
-                                        horizontal:
-                                            28.0, // Aumenta el padding horizontal
-                                        vertical:
-                                            16.0, // Aumenta el padding vertical
+                                        horizontal: 28.0,
+                                        vertical: 16.0,
                                       ),
                                       child: Text(
                                         messages[index].mensaje,
@@ -219,11 +224,9 @@ class _ChatPageState extends State<ChatPage> {
                                       ),
                                     ),
                                   ),
-                                  // Posición y tamaño de la imagen y hora
                                   Positioned(
-                                    bottom:
-                                        -3, // Asegura que esté en la parte inferior
-                                    right: 5, // Mantiene la imagen a la derecha
+                                    bottom: -3,
+                                    right: 5,
                                     child: Row(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.end,
@@ -232,20 +235,19 @@ class _ChatPageState extends State<ChatPage> {
                                           padding:
                                               const EdgeInsets.only(right: 5.0),
                                           child: Text(
-                                            '12:45', // Hora y minutos estáticos para la vista
+                                            // Extrae la hora y los minutos de fechaRegistro
+                                            '${messages[index].fechaRegistro.hour.toString().padLeft(2, '0')}:${messages[index].fechaRegistro.minute.toString().padLeft(2, '0')}',
                                             style: TextStyle(
                                               fontSize: 9,
-                                              color: Color.fromARGB(255, 39, 39,
-                                                  39), // Color del texto de la hora
+                                              color: Color.fromARGB(
+                                                  255, 39, 39, 39),
                                             ),
                                           ),
                                         ),
                                         Image.asset(
-                                          'assets/doblePalomaNoVisto.png', // Ruta de la imagen
-                                          width:
-                                              18, // Aumenta el tamaño de la imagen si es necesario
-                                          height:
-                                              18, // Aumenta el tamaño de la imagen si es necesario
+                                          'assets/doblePalomaNoVisto.png',
+                                          width: 18,
+                                          height: 18,
                                         ),
                                       ],
                                     ),
@@ -291,7 +293,8 @@ class _ChatPageState extends State<ChatPage> {
                           if (_controller.text.isNotEmpty) {
                             await sendMessage(miembroActual!.id,
                                 _controller.text, widget.idChat);
-                            //socket.emit('chat message', _controller.text);
+                            print(
+                                "Mensaje enviado: ${_controller.text}"); // Imprime el mensaje enviado
                             _controller.clear();
                           }
                         },

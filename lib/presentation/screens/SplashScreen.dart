@@ -7,7 +7,7 @@
 // <copyright file="SplashScreen.dart" company="Sedes-Univalle">
 // Esta clase está restringida para su uso, sin la previa autorización de Sedes-Univalle.
 // </copyright>
-
+//pagina de inicio
 import 'package:fluttapp/Config/Config.dart';
 import 'package:fluttapp/Models/CampaignModel.dart';
 import 'package:flutter/material.dart';
@@ -40,9 +40,7 @@ class _SplashScreenState extends State<SplashScreen> {
   bool esPrimeraVez = true;
   @override
   void initState() {
-    
-    socket =
-        IO.io('${Config.baseUrl}', <String, dynamic>{
+    socket = IO.io('${Config.baseUrl}', <String, dynamic>{
       //192.168.14.112
       'transports': ['websocket'],
       'autoConnect': false,
@@ -168,7 +166,7 @@ class _SplashScreenState extends State<SplashScreen> {
   /// Te lleva a la pantalla de inicio
   Future<void> Navegar_Pantalla_Main() async {
     lstlinks = await Obtener_Links();
-    
+
     lstVersions = await Obtener_Version();
     campaigns = await fetchCampaigns();
     print("lstVersions: $lstVersions");

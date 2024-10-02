@@ -26,9 +26,7 @@ class ChatMessage {
         visto: (json['visto'] is int)
             ? json['visto'] == 1
             : (json['visto'] ?? false),
-        fechaRegistro: DateTime.parse(json['fechaRegistro'])
-            .toUtc()
-            .add(Duration(hours: -4)),
+        fechaRegistro: DateTime.parse(json['fechaRegistro']).toUtc().add(Duration(hours: -4)),
       );
     } catch (e) {
       print('Error al convertir ChatMessage: $e');

@@ -260,7 +260,7 @@ try {
 
     return code;
   }
-
+  //actualizar la base
   Future<bool> checkCodeExists(int userId) async {
     var userId = globalLoggedInMember?.id;
 
@@ -445,7 +445,7 @@ try {
                       maxLength: 45, // Establece el máximo de caracteres a 45
                       keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
-                        labelText: 'Correo electrónico',
+                        labelText: 'Correo electrónico', //aca es el inicio de seccion
                         counterText:
                             '', // Si no quieres mostrar el contador de caracteres
                         errorText: mensajeErrorCorreo,
